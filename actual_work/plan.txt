@@ -44,4 +44,17 @@ What else I want to do
 
 
 I want to see if i can get the attributes that it finds rather than just the raw fingerprint result
+
+
+Seems like I need to use Vagrant to manage virtual box machines
+  Vagrant boots and kills machines, then runs a script on startup
+   - Get lots of different linux distros and one for windows
+   - have them boot
+   - connect to my local webserver
+   - get fingerprinted
+   - shutdown
+
+  Webserver just needs to fingerprint and store each of the objects somewhere with some form of name
+
+
  
