@@ -1,0 +1,110 @@
+Notes on the code
+
+src
+  content.js
+    Basically just an event event listener
+      listens for messages from injected page script
+      listens for messages from detectionListener.js and then displays to user
+
+  background.js
+    First parses public suffix list from file
+      basically parses all the url extensions like .edu etc into a list
+
+    Loads options
+    Loads finerprint generator
+    Loads web identities
+    Loads detections
+    adds request listener to run before sending headers
+      adds to onBeforeSendHeaders
+    adds response listener to run before request
+      adds to onBeforeRequest
+    
+    basically a setup script
+
+  classes
+    Attribute.js
+      name
+      key
+      action
+
+    Detection.js
+      domain
+      notified
+      attributes[]
+        detection array
+
+      addAttribute 
+        adds attribute to the detection array of attributes
+
+      getAttribute
+        gets attribute using name from detection array
+        uses array.findIndex which returns -1 if it doesnt contain
+          important for the other functions as this is the internal search used for the other accessors
+
+      removeAttribute
+        removes attribute using name from detection array
+
+      containsAttribute
+        returns if the attribute is in detection array
+      
+      from(json)
+        constructor from a json object
+
+
+    Fingerprint.js
+      constructor
+        id - identity
+        key - its corresponding data
+        weight
+        fontData
+        canvasData
+
+      get ua()
+        builds and returns user agent
+        uses data from key to build
+          assuming that key contains the data related to the identity id
+
+      get http()
+        returns
+          userAgent
+          acceptEncoding
+          acceptLanguage
+          order
+            Data.browsers[this.key[BROWSER]].http.order
+            no clue what this is yet
+
+      get navigator()
+        returns navigator object containing the constructed fingerprint
+          let nav = {
+              userAgent: ua,
+              appCodeName: browser.appcodename,
+              appName: browser.appname,
+              language: language,
+              appVersion: appVersion,
+              platform: platform,
+              oscpu: platform,
+              product: browser.product,
+              productSub: browser.productSub,
+              vendor: browser.vendor
+          }
+      
+      get screen()
+        returns screen object containing the constructed fingerprint
+          return {
+              width: resolution.width,
+              height: resolution.height,
+              colorDepth: DATA.screen.colordepth,
+              availWidth: resolution.width,
+              availHeight: resolution.height - taskbar,
+              pixelDepth: DATA.screen.colordepth
+          };
+
+      get date()
+        returns the data from fingerprint
+
+      from(json)
+        builds it from json
+  
+    Tree.js
+      seems to just be a tree utility class with weights
+      probably to pick the fingerprint attributes using the markov chain

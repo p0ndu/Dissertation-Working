@@ -1,0 +1,99 @@
+This paper centres around evaluating different methods of fingerprint defence
+
+How they measured each AFPET's effectiveness
+  Method 1
+    Focused around looking directly at an AFPETs ability to mask attributes
+
+    Runs browsers with and without AFPET installed to determine which attributes are masked and how
+    Have them visit a fingerprinting server
+    Compare the fingerprints with and without each AFPET using an analasys engine (FPIinspector)
+
+    Can be applied to AFPETS without a user base and without having its source code
+    
+  Method 2
+    Context dependant and observational methods
+    
+    Sites like panopticlick and amiunique have large sets of real-world fingerprints, revealing which are the most trackable
+    These datasets can be studied to evaluate an AFPET by checking how trackable fingerprints of their users are compared to the rest of the dataset
+
+    In practice, the datasets dont say which fingerprint is using which AFPET
+      hard to tell the effectiveness of each of them, especially on ones with small user numbers 
+
+    Method 3
+      combines the fingerprinting of method 1 (FPIinspector) with the analysis of method 2 (PETInspector)
+
+      uses FPIinspector to create a 'mask model' of each AFPET and applies that mask to the real world fingerprint dataset to produce a dataset representing what the browsers would look like to trackers if everyone had used that specific AFPET
+      By comparing the trackabilities on the two datasets (base and AFPET mask applied) you can measure the effectiveness of the AFPET
+      
+
+Entropy
+  how unique/unpredictable a browser fingerprint is in a dataset
+    higher entropy -> fingerprints are more unique -> easier to track
+    lower entropy -> fingerprints are less unique -> harder to track
+
+3 types of PETs
+  Attribute standardising
+    making your browser attributes appear as one of a small set of possible values
+    full standardisation makes all AFPET users appear identical
+    partial makes them appear from a few groups
+    AFPET may choose partial over full if spoofing an attribute value has implications for the user
+
+  Attribute varying
+    vary the value of an attribute so that the values of each user vary accross browsing activities
+
+  Attribute blocking
+    block some/all interactions between the browsing platform and trackers
+    can rely on a blacklist or block interactions matching known tracking patterns
+    
+
+Testing method
+  Using PETInspector, we performed an initial experiment finding no
+  additional spoofing from AFPETs crossing sessions. Thus, to save
+  time, our main experiment uses only a single session and does not
+  check for the masking of attributes by variation across sessions.
+  We use ClientSim to simulate six browsing platforms. Three of
+  these are virtual machines running various versions of Linux. We
+  introduce additional changes into these virtual machines to sim-
+  ulate differences in system configurations. Specifically, we install
+  different fonts and browser versions, set up different timezones,
+  and simulate different screen resolutions and languages, The re-
+  maining platforms run natively on a Linux desktop, Macbook Pro,
+  and a PC laptop. We perform measurements on Firefox and Chrome
+  browsers. More details on these configurations are in Table 2.
+  ClientSim drives these experimental browsing platforms to reach
+  FPServer for five reloads of each of the two domain names of FPServer.
+  On each platform, it performs these reloads a total of 28 times: one
+  time each for 26 PETs and one time each for the two baseline
+  browsers. All PETs are left in their default configurations.
+
+
+Section 4.3 - Results
+  Baseline browsers show no natural variation
+  15 AFPETS tested
+    12 mask at least one attribute in default settings
+    3 show no detectable masking with default configs
+
+    Some mask attributes they didnt claim and others behave inconsistently
+
+  11 Non-AFPET tools
+    BLPETs
+    some modify attributes in ways that make users more identifyable
+      inconsistent/illogical attributes
+
+So TLDR
+  many AFPETS do not properly hide you
+  some make you more detectable due to inconsistent and illogical attributes 
+    basically they contradict eachother meaning that you have spoofed it in some way
+
+  most AFPETs mask one attribute and only a few mask many
+  Tor browser bundle was the best effective method
+  Many tools claim to mask attributes but behave inconsistently
+  some non AFPET tools made you easier to track
+    primarily the blacklist based ones
+
+  Since the list of fingerprintable attributes is basically infinite, all results of this paper should be considered optimistic from the view of avoiding tracking
+  
+
+
+
+

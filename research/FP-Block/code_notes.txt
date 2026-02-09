@@ -1,0 +1,53 @@
+=========================
+Code Notes
+=========================
+First what are these weird extensions
+  .xul
+    XML User Interface Language
+      XML dialect for writing graphical user interfaces
+  .rdf
+    Resource Description Framework
+      supposedly to exchange graphing data?
+      data model for metadata
+  .jsm
+    Javascript Module
+
+install.rdf
+  Mostly sets metadata
+    details about the plugin
+    which firefox versions it supports
+
+ #########################################################################################   
+  FOR SOME REASON CHROME:// IN FIREFOX MEANS FIREFOX'S INTERNAL ui/RESOURCE SYSTEM
+    what the fuck who named that why is that the name what bro thats a different browser
+    what a stupid fucking name
+ ##########################################################################################
+
+
+Okay How does this shit actually work
+  Firefox loads -> browser.xul loads -> chrome.manifest overlays are applied -> fpblock overlay.xul loads -> script tags inside overlay.xul run -> obververs and content scripts are registered
+
+
+=================================
+Starting with modules first
+=================================
+
+detection.jsm
+  FP-Blocks internal records of fingerprinting attempts
+
+  stores when a site tries to read a fingerprint-relevant attribute
+
+httpRequestObserver.jsm
+  Observes all request and if the topic is 'http-on-modify-request'
+    it gets the http channel of the request
+      HTTP channel is basically just the tcp connection that the data is flowing through
+    tries to get the domain of the request
+    tries to get the identity corresponding to the domain
+      if none exists then it tries to make one
+    Sets all the browser data to that of the identity
+      this code block seems to contain cases for specific sites like facebook twitter and google plus
+      there are specific options which let you block some plugins from some social media sites but not others
+
+  if topic is 'http-on-examine-response'
+    it sets up a response listener instead
+

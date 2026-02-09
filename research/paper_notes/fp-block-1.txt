@@ -1,0 +1,136 @@
+Notes on the FP-Block Paper
+===========================================
+
+Regular tracking
+  Does not try track the user outside of its own website
+  Usually done for better content suggestions, targeted ads etc
+
+Fingerprinting
+  Tracking users across a wide range of sites based on a fingerprint
+  Fingerprint obtained by requesting many attributes and in order to uniquely identify the user
+  Fingerprintable characteristics may include
+    Screen resolution
+    HTTP user agent
+    Time zone
+
+Countermeasures to tracking
+  Several flaws
+    "Blacklists are prone to being incomplete"
+
+    Heuristically updated blacklists have the same problem
+      the next tracker may use methods that arent covered by the heursitics
+      
+    Faking attributes
+      spoofing things such as hardware detais may lead to inconsistencies
+        makes you stand out more than if you hadnt
+
+Passive vs Active Fingerprinting
+  Passive
+    uses attributes inherent in communication
+      i.e. the order of HTTP headers
+
+  Active
+    running attribute-gathering scripts on the client side 
+      i.e. determining JS engine speed
+
+
+
+The goal of FP-Block
+  Create Web identities for each site to stop both passive and active fingerprinting
+
+  Stop users from beign tracked across sites
+    its fine if one site recognises you, as long as it doesnt recognise you when it gets your details from another site
+
+  Ensuring that fingerprints are deemed 'consistant' or genuine
+    no self-defeating attributes that dont make any sense
+
+  Minimal disruption to the normal functioning of the site
+
+The Fingerprinting Surface
+  oh my god theres so many attributes
+  im gonna find it in the code and then paste it in here
+
+
+
+Generating web identities
+  Two distinct web identities can never be seen as the same person by a fingerprinter
+    or the whole thing is pointless
+
+  This is hard because software and hardware are updated frequently and the information you give the fingerprinter still needs to make sense
+  
+  Attributes grouped into the following classes
+    Browser
+      User agent
+        The name of the program representing you
+        should really be a browser for our use case
+      Browser name
+      Vendor
+        the company that develops and maintains the browser
+      Accept-encoding
+        Tells web server which compression algorithms the browser understands
+    
+    Language
+      System language
+      User language
+      Lanugage
+        i guess navigator language
+
+    OS/CPU
+      Platform
+      CPU class
+      oscpu
+        browser api property that returns string identifying OS and CPU
+        basically .tostring for os and cpu
+
+    Screen
+      Width
+      Height
+      Colour-Depth
+
+    Timezone
+      timezone offset
+
+  ###########################################################################################
+  A fresh identity should have at least 2 different attributes from 2 different classes to ALL OTHER CREATED WEB IDENTITIES
+  ###########################################################################################
+
+  Consistency of the created identity
+    Modelled using markov chains
+      Like a type of FSM
+      following attribute is entirely dependent on the current one
+
+    This way when you model the construction of a web identity, the order of which is generated means you can keep the identity as believable
+
+
+The actual program
+  Focuses on 2 layers
+    JS
+      for active Fingerprinting
+    HTTP
+      for passive fingerprinting
+    Flash
+      all fingerprinters use flash
+      just hides it
+
+  Implementation
+    adds watchers for http-on-modify-request and http-on-examine-response
+      basically hooks the requests and uses this to spoof values
+
+    When you make a request
+      the first stored web identity for the domain is retrieved
+        if none exist it makes a new one
+
+      Http headers are set according to the identity
+
+      E-tag headers are deleted
+
+      Requests for social plugins are cancelled
+
+    When you receive a response
+      Observer evaluates the fingerprint and a JS script enforces it
+
+    Blocking access to blocked/spoofed attributes is done by replacing the access functionality of JS using navigator
+      basically overrides the API accessors to either give your values or throw errors instead
+
+    After the script runs it deletes itself to avoid detection
+

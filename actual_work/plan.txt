@@ -1,0 +1,47 @@
+Plan
+
+First need to setup a way to fingerprint myself
+  some kind of webserver on localhost that just has a homepage and fingerprintjs running on it
+    Just use the stuff I know
+      or better find one of my old projects and throw up the code, like the fullstack one
+
+
+  setup and run fingerprintjs on the webserver
+
+  visit it on chrome and see what i get
+
+
+
+
+fingerprintjs
+  says it wont work using an import if visitor is running firefox or a blocker
+
+Web server is running
+  Im getting a different fingerprint value on zen vs chromium
+
+  why could this be?
+
+    Different User agent
+      check the outbound requests
+    
+    Maybe one of them is spoofing or blocking something
+      check zen for this
+
+    free one is meant to be much worse so it could just not be as good
+
+Displaying the get request from each browser
+  very different LMAO
+  no wonder its not the same fingerprint
+
+  turns out zen is built off of firefox not chrome, which is why the headers are as different as they are
+
+
+What else I want to do
+  Visit it in kali
+    one with the same browser one with a different one
+  find a way to display the fingerprint object and see the attributes rather than just the ID
+  maybe get another chromium browser and see if it would fingerprint the same thing
+
+
+I want to see if i can get the attributes that it finds rather than just the raw fingerprint result
+ 
