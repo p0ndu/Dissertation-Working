@@ -1,0 +1,34 @@
+Title:
+  Do Anti-Fingerprinting Tools Improve Anonymity? An Empirical Evaluation of Entropy Reduction Versus Real-World Anonymity
+
+Proposal:
+  Browser fingerprinting is a tracking technique that collects high-dimensional attributes from browser APIs and JavaScript environments in order to uniquely identify users across sessions. Unlike browser cookies, fingerprinting does not rely on client-side storage, meaning it is more difficult to detect or avoid. As a result of its effectiveness and the difficulty to develop effective countermeasures, it has become widely used in online tracking, fraud detection systems, advertising and surveillance infrastructure.
+
+  In response, Anti-Fingerprinting Tools (AFPTs) have been developed. These AFPTs claim to increase user anonymity by modifying, obfuscating or standardising browser attributes used by these fingerprinters. Their effectiveness is usually evaluated using Shannon-Entropy based metrics derived from information theory. Using this definition, entropy quantifies the uncertainty in associating a set of browser attributes with a particular user, or fingerprint, within a population.
+
+  However, if the AFPT itself is detectable, it may become another fingerprinting vector. If AFPT usage only represents a small subset of the overall population, detectability may put the user into a smaller subset. This means that the resulting anonymity set, the set of viable fingerprints that a user could possibly be, is much smaller than before. The smaller the anonymity set, the fewer fingerprints that a user must be distinguished from, potentially increasing the risk of re-identification. This means that the effectiveness of an AFPT may not solely rely on entropy reduction, but also its ability to remain undetectable from the wider population.
+
+  An AFPT focused on entropy reduction alone, could therefore be harmful to a user's online anonymity. If it leaves behind detectable artefacts or results in a sufficiently small anonymity set, a users identifiability may not directly correlate with the entropy changes.
+
+  As previously mentioned, this technology contributes to the increase in surveillance and tracking online, leading to more users employing AFPTs in order to mitigate this shift. However if entropy is a flawed metric, prior evaluations may be misleading, and privacy-enhancing technologies could be optimising for the wrong thing. This could lead to users having a false sense of security, while failing to meaningfully reduce the risk of re-identification.
+
+Research Quesiton:
+  Do Anti-Fingerprinting Tools improve effective anonymity in practice, or does entropy reduction fail to capture the full picture of real-world anonymity due to the detectability of AFPTs and the resulting reduction in anonymity set size?
+
+  This study contributes a more rigorous evaluation framework for anti-fingerprinting technologies by integrating entropy-based metrics with anonymity-set analysis and empirical re-identification testing. It aims to evaluate whether commonly used AFPTs improve real-world anonymity, or whether their detectability counteracts their intended privacy benefits. It also aims to clarify whether entropy is sufficient to measure the re-identifiability of a user, how entropy correlates with re-identification rates, and whether the anonymity-set reduction causes it to overstate its effectiveness.
+
+Objectives:
+  - Measure entropy before and after AFPT implementation
+  - identify detectable attributes introduced by AFPTs
+  - Quantify changes in anonymity set size
+  - Evaluate cross session re-identification rates in controlled conditions
+  - Compare entropy-based metrics with empirical identifiability
+
+Methodology: 
+  - Entropy will be calculated over the joint distribution of collected fingerprint attributes using Shannon's entropy formula
+  - Implement commonly used fingerprinting libraries on a locally hosted server (FP-Server)
+  - Create a large set of 'test machines' with varying system configurations, using Docker or similar tools
+  - Fingerprint each test machine and measure its entropy using the FP-Server to create a local fingerprint database( FP-Database)
+  - Compare this FP-Database with publicly available ones to measure its validity
+  - Implement a variety of AFPTs on the test machines with a variety of configurations
+  - Compare the entropy changes and identifiability of each AFPT
